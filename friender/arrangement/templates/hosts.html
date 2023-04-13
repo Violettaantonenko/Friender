@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <title> {% block title %} hosts </title>{% endblock %}
+<h1>
+    Друзья, которых пришласили на встречу
+    {% for host in hosts %}
+        <h2> {{host}} </h2>
+    {% endfor %}
+</h1>
+
+{% endblock %}
