@@ -11,4 +11,5 @@ urlpatterns = [
     path('guest/',all_guests,name='guests'),
     path('establishments_rating/',Establishments_rating,name= 'Establishments_rating'),
     path('users_rating/', Users_rating, name= 'Users_rating'),
+    # path(r"^rating_user)
 ]

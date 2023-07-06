@@ -23,13 +23,13 @@ HOBBIES = [
     ('ms', 'music'),
 ]
 class Users(models.Model):
-    name = models.CharField(max_length=100)
-    surname = models.CharField(max_length=100)
-    age = models.IntegerField ()
-    sex = models.CharField(max_length=1, choices=SEX)
-    city = models.CharField(max_length=100, default='Minsk')
-    email = models.EmailField(null=True, unique=True)
-    # class Meta:
+    name = models.CharField(max_length=100, verbose_name='Имя')
+    surname = models.CharField(max_length=100, verbose_name='Фамилия')
+    age = models.IntegerField (verbose_name='Возраст')
+    sex = models.CharField(max_length=1, choices=SEX,verbose_name='Пол')
+    city = models.CharField(max_length=100, default='Minsk',verbose_name='Город')
+    email = models.EmailField(null=True, unique=True,verbose_name='Почта')
+    class Meta:
     #     indexes = [
     #         models.Index(fields=["age", "name"]),
     #         models.Index(fields=["name"]),
@@ -38,22 +38,20 @@ class Users(models.Model):
     #         models.Index(fields=["name",'-sex']),
     #         models.Index(fields=["age", 'sex']),
     #     ]
+        verbose_name = 'Пользователи'
+        verbose_name_plural = 'Пользователи'
     def __str__(self):
         return self.name
 class Host (Users):
     max_spent_value = models.PositiveIntegerField(null=True)
     class Meta:
-        indexes = [
-            models.Index(fields=["max_spent_value"])
-        ]
+        verbose_name_plural = 'Приглашающие'
     def __str__(self):
         return str(self.name)
 class Guest(Users):
     min_bill_value = models.PositiveIntegerField(null=True)
     class Meta:
-        indexes = [
-            models.Index(fields=["min_bill_value"])
-        ]
+        verbose_name_plural = 'Гости'
     def __str__(self):
         return str(self.name)
 class Establishments(models.Model):
@@ -62,9 +60,7 @@ class Establishments(models.Model):
     address = models.CharField(max_length=40,null=True)
     phone  = models.CharField(max_length=40,null=True)
     class Meta:
-        indexes = [
-            models.Index(fields=["name","category"])
-        ]
+        verbose_name_plural = 'Заведения'
     def __str__(self):
         return self.name
 
@@ -72,7 +68,8 @@ class Hobbies(models.Model):
     name=models.CharField(max_length=100)
     category = models.CharField(max_length=2, choices=HOBBIES)
     user = models.ManyToManyField("Users")
-
+    class Meta:
+        verbose_name_plural = 'Хобби'
     def __str__(self):
         return self.name
 
@@ -80,11 +77,15 @@ class Arrangements (models.Model):
     host = models.ForeignKey("Host", on_delete=models.CASCADE, null=True)
     guest = models.ForeignKey("Guest", on_delete=models.CASCADE, null=True)
     establishments=models.ForeignKey("Establishments", on_delete=models.CASCADE)
-
+    class Meta:
+        verbose_name_plural = 'Свидания'
 class Passport(models.Model):
     passport_id=models.CharField(max_length=10, unique=True)
     date_create=models.DateTimeField(auto_created=datetime.utcnow())
     user=models.OneToOneField("Users",on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = 'Паспорт'
 
     def __str__(self):
         return self.passport_id
@@ -103,9 +104,13 @@ class Rating(models.Model):
 
 class EstablishmentsRating(Rating):
     establishment =models.ForeignKey("Establishments", on_delete=models.CASCADE)
+    class Meta:
+        verbose_name_plural = 'Рейтинг заведений'
     def __str__(self):
         return str(self.establishment)
 class UserRating(Rating):
     user=models.ForeignKey("Users", on_delete=models.CASCADE)
+    class Meta:
+        verbose_name_plural = 'Рейтинг пользователей'
     def __str__(self):
         return str(self.rating)
